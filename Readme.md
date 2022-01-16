@@ -6,10 +6,38 @@ I made this to compliment a refurbished Surface Pro (hence simple UI) that I had
 
 Should work on Windows and Linux. 
 
-## Requirements
-```bash
-pip install PyQt5
+## Features
 
+- Set a timer between 1-180 minutes
+- When the time is up, the application will pause playing media
+- You can select Restart, Shutdown, Sleep or Hibernate.
+- `[Optional]` Audio volume to reduces over the last minute
+- `[Optional]` Change the brightness of the screen<sup>1</sup>
+  
+<sup>1</sip>Brightness setting will only work on Xorg. It's also possble to turn the backlight off using this setting. You have been warned.
+
+## Requirements
+
+### Windows
+
+Install Python: [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
+
+```bash
+pip install PyQt5 screen_brightness_control keyboard
+```
+
+### Linux
+
+Ensure Python is intalled via your package manager
+
+Install xdotool from your distributions package manager
+
+```shell
+pip install PyQt5 screen_brightness_control
+```
+
+## Useage
+```shell
 python main.py [--lodpi]
 ```
 
@@ -17,18 +45,11 @@ python main.py [--lodpi]
 
 The script will use HiDPI by default. If you wish to use the standard setting, pass --lodpi as an argument.
 
-~~If you're not using a HiDPI screen, comment out:~~
-
-```diff
-- QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
-- QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
-```
-
 ## TODO
 
-- [ ] Pause playing audio when going to sleep
-- [ ] Slowly adjust volume down (maybe in the last minute or two?)
-- [ ] Possibly add brightness control
+- [x] Pause playing audio when going to sleep
+- [x] Slowly adjust volume down (maybe in the last minute or two?)
+- [x] Possibly add brightness control
 - [x] Make the dial and spinbox react to the time decreasing.
 - [x] Make the UI more uniform on both platforms.
 - [x] Okay I need to fix the UI on windows, it's pretty awful ~~(see screenshot)~~

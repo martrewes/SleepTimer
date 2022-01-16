@@ -56,8 +56,7 @@ class Ui(QtWidgets.QMainWindow):
 
         #Figure out how many steps to reduce volume, it's very hacky!
         if os.name == 'nt':
-            self.audioSteps = [49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-            self.audioSteps.reverse()
+            self.audioSteps = [59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11]
         else:
             #assumes 20 steps
             self.audioSteps = [58, 55, 52, 49, 46, 43, 40, 37, 34, 31, 28, 25, 22, 19, 16, 13, 10, 7, 4, 1]
@@ -152,13 +151,13 @@ class Ui(QtWidgets.QMainWindow):
     def osReduceVolume(self):
         if self.chkVolume.isChecked():
             if os.name == 'nt':
-                1+1
+                keyboard.press_and_release('volume down')
             else:
                 os.system("xdotool key XF86AudioLowerVolume")
             del self.audioSteps[0]
     def osPausePlayback(self):
         if os.name == 'nt':
-            1+1
+            keyboard.press_and_release('play/pause media')
         else:
             os.system("xdotool key XF86AudioPlay")
     
@@ -178,9 +177,9 @@ class Ui(QtWidgets.QMainWindow):
                 if self.radHibernate.isChecked():
                     self.osHibernate()
                 exit()
-
-            if self.time.second() == self.audioSteps[0] and self.time.minute() < 1 and self.time.hour() == 0:
-                self.osReduceVolume()
+            if len(self.audioSteps) > 0:
+                if self.time.second() == self.audioSteps[0] and self.time.minute() < 1 and self.time.hour() == 0:
+                    self.osReduceVolume()
             self.time = self.time.addSecs(-1)
             self.statusBar.showMessage("Time Remaining: " + self.time.toString("hh:mm:ss",))
 

@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets, uic, QtCore
 import sys
 import os
 import screen_brightness_control as sbc
+if os.name == 'nt':
+    import keyboard
 
 #Check if --lodpi was an arguement, if not use HiDPI
 if len(sys.argv) == 2 and sys.argv[1] == '--lodpi':
@@ -38,6 +40,7 @@ class Ui(QtWidgets.QMainWindow):
         self.btnBrightness = self.findChild(QtWidgets.QPushButton, 'btnBrightness')
         self.grpBrightness = self.findChild(QtWidgets.QGroupBox, 'grpBrightness')
         self.btnEnable = self.findChild(QtWidgets.QPushButton, 'btnEnable')
+        self.chkVolume = self.findChild(QtWidgets.QCheckBox, 'chkVolume')
         self.btnStart.clicked.connect(self.btnPressed)
         self.btnBrightness.clicked.connect(self.btnBrightnessPressed)
         self.sldBrightness.valueChanged.connect(self.brightnessChanged)
@@ -50,6 +53,15 @@ class Ui(QtWidgets.QMainWindow):
         self.sldBrightness.setEnabled(False)
         self.btnBrightness.setEnabled(False)
         self.active = False
+
+        #Figure out how many steps to reduce volume, it's very hacky!
+        if os.name == 'nt':
+            self.audioSteps = [49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+            self.audioSteps.reverse()
+        else:
+            #assumes 20 steps
+            self.audioSteps = [58, 55, 52, 49, 46, 43, 40, 37, 34, 31, 28, 25, 22, 19, 16, 13, 10, 7, 4, 1]
+
         self.show()
         
     #Update the minute text if the dial is moved    
@@ -85,7 +97,7 @@ class Ui(QtWidgets.QMainWindow):
     # Button press routine
     def btnPressed(self):
         global timeSet 
-        
+
         if self.active == False:
             timeSet = int(self.spnTime.value())
             self.btnStart.setText("Cancel")
@@ -137,6 +149,18 @@ class Ui(QtWidgets.QMainWindow):
             os.system("rundll32.exe powrprof.dll,SetSuspendState 1,1,0")
         else:
             os.system("systemctl hibernate")
+    def osReduceVolume(self):
+        if self.chkVolume.isChecked():
+            if os.name == 'nt':
+                1+1
+            else:
+                os.system("xdotool key XF86AudioLowerVolume")
+            del self.audioSteps[0]
+    def osPausePlayback(self):
+        if os.name == 'nt':
+            1+1
+        else:
+            os.system("xdotool key XF86AudioPlay")
     
     # on each tick, what to do
     def ticker(self):
@@ -144,6 +168,7 @@ class Ui(QtWidgets.QMainWindow):
             global time
             self.spnTime.setValue((int(self.time.toString("hh")) * 60) + int(self.time.toString("mm")))
             if self.time.second() == 0 and self.time.minute() == 0 and self.time.hour() == 0:
+                self.osPausePlayback()
                 if self.radShutdown.isChecked():
                     self.osShutdown()
                 if self.radRestart.isChecked():
@@ -154,8 +179,8 @@ class Ui(QtWidgets.QMainWindow):
                     self.osHibernate()
                 exit()
 
-            if (1+1==2):
-                1+1
+            if self.time.second() == self.audioSteps[0] and self.time.minute() < 1 and self.time.hour() == 0:
+                self.osReduceVolume()
             self.time = self.time.addSecs(-1)
             self.statusBar.showMessage("Time Remaining: " + self.time.toString("hh:mm:ss",))
 

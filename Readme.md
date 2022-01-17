@@ -14,7 +14,7 @@ Should work on Windows and Linux.
 - `[Optional]` Audio volume to reduces over the last minute
 - `[Optional]` Change the brightness of the screen<sup>1</sup>
   
-<sup>1</sip>Brightness setting will only work on Xorg. It's also possble to turn the backlight off using this setting. You have been warned.
+<sup>1. Brightness setting will only work on Windows and Xorg on Linux. It's also possble to turn the backlight off using this setting, so I added a button to enable it to be safe. You have been warned.</sup>
 
 ## Requirements
 

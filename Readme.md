@@ -12,9 +12,10 @@ Should work on Windows and Linux.
 - When the time is up, the application will pause playing media
 - You can select Restart, Shutdown, Sleep or Hibernate.
 - `[Optional]` Audio volume to reduces over the last minute
-- `[Optional]` Change the brightness of the screen<sup>1</sup>
-  
-<sup>1. Brightness setting will only work on Windows and Xorg on Linux. It's also possble to turn the backlight off using this setting, so I added a button to enable it to be safe. You have been warned.</sup>
+- `[Optional]` Change the brightness of the screen
+
+> **Note**  
+> *Brightness setting will only work on Windows and Xorg on Linux. It's also possble to turn the backlight off using this setting, so I added a button to enable it to be safe. You have been warned.*
 
 ## Requirements
 
